@@ -5,8 +5,8 @@ import csv
 req = requests.get("https://esportes.estadao.com.br/classificacao/futebol/campeonato-brasileiro-serie-a/2021")
 soup = BeautifulSoup(req.content, "html.parser")
 
-df = open('dataframe.csv', 'w', encoding='utf-8-sig')
-writer = csv.writer(df)
+data = open('data.csv', 'w', encoding='utf-8-sig')
+writer = csv.writer(data)
 header = ["rodada", "time1", "time2", "gol1", "gol2"]
 writer.writerow(header)
 
@@ -19,4 +19,4 @@ for rodada in soup.find_all(class_="swiper-slide"):
             row.append(gols.text)
         writer.writerow(row)
    
-df.close()
+data.close()
