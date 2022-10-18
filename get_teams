@@ -1,8 +1,0 @@
-from bs4 import BeautifulSoup
-import requests
-
-req = requests.get("https://esportes.estadao.com.br/classificacao/futebol/campeonato-brasileiro-serie-a/2021")
-soup = BeautifulSoup(req.content, "html.parser")
-for rodada in soup.find_all(class_="swiper-slide"):
-    for jogo in rodada.find_all(class_="item"):
-        print(jogo.find(class_="details"))
