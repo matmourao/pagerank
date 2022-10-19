@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import csv
+import numpy as np
 
 req = requests.get("https://esportes.estadao.com.br/classificacao/futebol/campeonato-brasileiro-serie-a/2021")
 soup = BeautifulSoup(req.content, "html.parser")
@@ -22,15 +23,20 @@ for rodada in soup.find_all(class_="swiper-slide"):
         partidas.append(row)
 data.close()
 
+times = []
 perdedores = []
 vencedores = []
 for partida in partidas:
+    times.append(partida[1])
+
     if partida[3] < partida[4]:
         perdedores.append(partida[1])
         vencedores.append(partida[2])
     if partida[4] < partida[3]:
         perdedores.append(partida[2])
         vencedores.append(partida[1])
+times = list(set(times))
+times.sort()
 
 arestas = []
 for i in range(len(perdedores)):
@@ -53,3 +59,18 @@ with open("arestas.csv", "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerow(["source","target","weight"])
     writer.writerows(arestas)
+
+indice = {}
+for i in range(len(times)):
+  indice[times[i]] = i
+for i in arestas:
+  for j in range(2):
+    i[j] = indice.get(i[j])
+
+matriz = np.zeros((len(times), len(times)))
+for a in arestas:
+    i = a[0]
+    j = a[1]
+    matriz[i][j] = a[2]
+print(matriz)
+print(times)
