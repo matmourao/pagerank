@@ -73,4 +73,10 @@ for a in arestas:
     j = a[1]
     matriz[i][j] = a[2]
 print(matriz)
+
+matriz = matriz / matriz.sum(axis=0)
+print(matriz)
 print(times)
+
+H = 0.9 * matriz + 0.1 * np.ones(20)
+print(H)
