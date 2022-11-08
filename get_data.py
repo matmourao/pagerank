@@ -1,7 +1,11 @@
+from audioop import reverse
 from bs4 import BeautifulSoup
+from regex import R
 import requests
 import csv
 import numpy as np
+import pandas as pd
+
 
 req = requests.get("https://esportes.estadao.com.br/classificacao/futebol/campeonato-brasileiro-serie-a/2021")
 soup = BeautifulSoup(req.content, "html.parser")
@@ -73,10 +77,17 @@ for a in arestas:
     j = a[1]
     matriz[i][j] = a[2]
 print(matriz)
+df = pd.DataFrame(matriz)
+df.to_csv("matriz.csv")
 
-matriz = matriz / matriz.sum(axis=0)
-print(matriz)
-print(times)
+matriz = matriz.T
+matriz = matriz/matriz.sum(axis=0)
 
-H = 0.9 * matriz + 0.1 * np.ones(20)
-print(H)
+H = 0.9 * matriz + 0.1 * np.ones((20,20))/20
+
+x_0 = H @ np.ones(20)/20
+x_1 = H @ x_0
+while np.linalg.norm(x_0 - x_1) > 0.001:
+  x_0 = x_1
+  x_1 = H @ x_1
+print(x_1)
