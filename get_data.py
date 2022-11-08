@@ -94,6 +94,8 @@ rank = []
 for i in range(20):
   rank.append([times[i], r[i]])
 rank.sort(key = lambda x: x[1], reverse=True)
+for i in range(len(rank)):
+  rank[i] = [i+1, rank[i][0], rank[i][1]]
 with open("rank.csv", "w", newline="") as f:
   writer = csv.writer(f)
   writer.writerows(rank)
