@@ -1,6 +1,4 @@
-from audioop import reverse
 from bs4 import BeautifulSoup
-from regex import R
 import requests
 import csv
 import numpy as np
@@ -90,4 +88,12 @@ x_1 = H @ x_0
 while np.linalg.norm(x_0 - x_1) > 0.001:
   x_0 = x_1
   x_1 = H @ x_1
-print(x_1)
+
+r = 100*x_1
+rank = []
+for i in range(20):
+  rank.append([times[i], r[i]])
+rank.sort(key = lambda x: x[1], reverse=True)
+with open("rank.csv", "w", newline="") as f:
+  writer = csv.writer(f)
+  writer.writerows(rank)
